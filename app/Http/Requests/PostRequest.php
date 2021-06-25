@@ -16,11 +16,21 @@ class PostRequest extends FormRequest
 
     public function rules()
     {
-        return [
+        $rules = [
             'title' => 'required|max:255',
             'body' => 'required',
-            'slug' => 'unique:posts|regex:/^[A-Za-z0-9 ]+$/i'
+            'slug' => 'unique:posts|regex:/^[A-Za-z0-9 ]+$/i',
+            'metaTitle' => 'max:255',
+            'metaDescription' => 'max:255'
         ];
+
+        if ($this->method() === 'PUT') {
+            // this ensures that an existing post still requires a slug, but that
+            // it doesn't validate against itself and trigger an error!
+            $rules['slug'] = 'unique:posts,title,' . $this->get('slug') . '|regex:/^[A-Za-z0-9\- ]+$/i';
+        }
+
+        return $rules;
     }
 
     public function messages()

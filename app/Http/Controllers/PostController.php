@@ -85,6 +85,8 @@ class PostController extends Controller
     {
         $post = Post::where('slug', $slug)->first();
 
+        $data = $request->validated();
+
         if ($request->has('delete')) {
             $post->delete();
             $message = 'Post deleted!';
@@ -93,11 +95,11 @@ class PostController extends Controller
         }
 
         $post->title = $request->get('title');
-        $post->metaTitle = $request->get('metaTitle');
-        $post->body = $request->get('body');
-        $post->metaDescription = $request->get('metaDescription');
-        $post->slug = $request->get('slug') ?? Str::slug($post->title);
-        $post->user_id = $request->user()->id;
+        $post->title = $data['title'];
+        $post->metaTitle = $data['metaTitle'];
+        $post->body = $data['body'];
+        $post->metaDescription = $data['metaDescription'];
+        $post->slug = $data['slug'] ?? Str::slug($post->title);
 
         $message = 'Post updated!';
 

@@ -7,6 +7,16 @@
         </div>
     @endif
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="/admin/blog/post/{{ $post->slug }}" method="post" class="container">
         <input type="hidden" name="_method" value="PUT">
 
