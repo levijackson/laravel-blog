@@ -29,6 +29,18 @@ class PostController extends Controller
       }
     }
 
+    public function single(Request $request, string $slug)
+    {
+        $post = Post::where('slug', $slug)->first();
+
+        if ($post) {
+            return view('blog.posts.single', ['post' => $post]);
+        }
+        
+        return redirect('/')
+            ->withErrors('This post does not exist.');
+    }
+
     public function save(Request $request)
     {
         $post = new Post();
