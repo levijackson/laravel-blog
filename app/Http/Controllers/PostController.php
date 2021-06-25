@@ -33,7 +33,12 @@ class PostController extends Controller
 
     public function single(Request $request, string $slug)
     {
-        $post = Post::where('slug', $slug)->first();
+        $where = ['slug' => $slug];
+        if (!$request->user() || !$request->user()->canManagePosts()) {
+            $where['active'] = '1';
+        }
+
+        $post = Post::where($where)->first();
         if ($post) {
             $comments = $post->comments()->get();
             return view('blog.posts.single', ['post' => $post, 'comments' => $comments]);
@@ -45,13 +50,17 @@ class PostController extends Controller
 
     public function save(PostRequest $request)
     {
+        if (!$request->user()->canManagePosts()) {
+            return redirect('/');
+        }
+
         $data = $request->validated();
 
         $post = new Post();
         $post->title = $data['title'];
-        $post->metaTitle = $data['metaTitle'];
+        $post->metaTitle = $data['metaTitle'] ?? '';
         $post->body = $data['body'];
-        $post->metaDescription = $data['metaDescription'];
+        $post->metaDescription = $data['metaDescription'] ?? '';
         $post->slug = $data['slug'] ?? Str::slug($post->title);
         $post->user_id = $request->user()->id;
 
@@ -83,6 +92,10 @@ class PostController extends Controller
 
     public function update(PostRequest $request, string $slug)
     {
+        if (!$request->user()->canManagePosts()) {
+            return redirect('/');
+        }
+        
         $post = Post::where('slug', $slug)->first();
 
         $data = $request->validated();
@@ -96,9 +109,9 @@ class PostController extends Controller
 
         $post->title = $request->get('title');
         $post->title = $data['title'];
-        $post->metaTitle = $data['metaTitle'];
+        $post->metaTitle = $data['metaTitle'] ?? '';
         $post->body = $data['body'];
-        $post->metaDescription = $data['metaDescription'];
+        $post->metaDescription = $data['metaDescription'] ?? '';
         $post->slug = $data['slug'] ?? Str::slug($post->title);
 
         $message = 'Post updated!';

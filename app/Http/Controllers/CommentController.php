@@ -11,6 +11,10 @@ class CommentController extends Controller
 {
     public function save(CommentRequest $request)
     {
+        if (!$request->user()) {
+            return redirect('/');
+        }
+
         $data = $request->validated();
 
         $comment = new Comment();
@@ -26,6 +30,10 @@ class CommentController extends Controller
 
     public function delete(DeleteCommentRequest $request, int $commentId)
     {
+        if (!$request->user()) {
+            return redirect('/');
+        }
+        
         $comment = Comment::where('id', $commentId)->first();
 
         if ($request->has('delete')) {

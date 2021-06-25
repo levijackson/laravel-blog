@@ -19,7 +19,7 @@ class PostRequest extends FormRequest
         $rules = [
             'title' => 'required|max:255',
             'body' => 'required',
-            'slug' => 'unique:posts|regex:/^[A-Za-z0-9 ]+$/i',
+            'slug' => 'unique:posts|regex:/^[A-Za-z0-9- ]+$/i',
             'metaTitle' => 'max:255',
             'metaDescription' => 'max:255'
         ];
