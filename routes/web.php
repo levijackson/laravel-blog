@@ -23,5 +23,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::group(['prefix' => 'blog'], function () {
         Route::get('/post', 'App\Http\Controllers\PostController@create');
         Route::post('/post', 'App\Http\Controllers\PostController@save');
+        Route::get('/post/{slug}', 'App\Http\Controllers\PostController@edit');
+        Route::put('/post/{slug}', 'App\Http\Controllers\PostController@update');
     });
 });
