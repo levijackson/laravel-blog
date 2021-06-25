@@ -32,9 +32,9 @@ class PostController extends Controller
     public function single(Request $request, string $slug)
     {
         $post = Post::where('slug', $slug)->first();
-
         if ($post) {
-            return view('blog.posts.single', ['post' => $post]);
+            $comments = $post->comments()->get();
+            return view('blog.posts.single', ['post' => $post, 'comments' => $comments]);
         }
         
         return redirect('/')
