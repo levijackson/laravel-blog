@@ -51,4 +51,22 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Comments', 'user_id');
     }
 
+    /**
+     * Check if a user can CRUD posts
+     */
+    public function canManagePosts(): bool
+    {
+        if ($this->role === 'author' || $this->isAdmin()) {
+            return true;
+        }
+        return false;      
+    }
+
+    /**
+     * Check if the user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

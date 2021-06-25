@@ -18,3 +18,10 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Route::get('/blog', 'App\Http\Controllers\PostController@index');
 
 Auth::routes();
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::group(['prefix' => 'blog'], function () {
+        Route::get('/post', 'App\Http\Controllers\PostController@create');
+        Route::post('/post', 'App\Http\Controllers\PostController@save');
+    });
+});
