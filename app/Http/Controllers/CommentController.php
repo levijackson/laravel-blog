@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comment;
+use App\Http\Requests\CommentRequest;
 
 class CommentController extends Controller
 {
-    public function save(Request $request)
+    public function save(CommentRequest $request)
     {
+        $data = $request->validated();
+
         $comment = new Comment();
-        $comment->comment = $request->get('comment');
+        $comment->comment = $data['comment'];
         $comment->user_id = $request->user()->id;
-        $comment->post_id = $request->get('post_id');
+        $comment->post_id = $data['post_id'];
 
         $comment->save();
 
