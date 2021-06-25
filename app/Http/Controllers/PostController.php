@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Post;
 
+use App\Http\Requests\PostRequest;
+
 class PostController extends Controller
 {
     public function index()
@@ -41,14 +43,16 @@ class PostController extends Controller
             ->withErrors('This post does not exist.');
     }
 
-    public function save(Request $request)
+    public function save(PostRequest $request)
     {
+        $data = $request->validated();
+
         $post = new Post();
-        $post->title = $request->get('title');
-        $post->metaTitle = $request->get('metaTitle');
-        $post->body = $request->get('body');
-        $post->metaDescription = $request->get('metaDescription');
-        $post->slug = $request->get('urlSlug') ?? Str::slug($post->title);
+        $post->title = $data['title'];
+        $post->metaTitle = $data['metaTitle'];
+        $post->body = $data['body'];
+        $post->metaDescription = $data['metaDescription'];
+        $post->slug = $data['urlSlug'] ?? Str::slug($post->title);
         $post->user_id = $request->user()->id;
 
         if ($request->has('draft')) {
@@ -77,7 +81,7 @@ class PostController extends Controller
             ->withErrors('You do not have permission to edit this post.');
     }
 
-    public function update(Request $request, string $slug)
+    public function update(PostRequest $request, string $slug)
     {
         $post = Post::where('slug', $slug)->first();
 
