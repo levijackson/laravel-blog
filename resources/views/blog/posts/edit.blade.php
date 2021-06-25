@@ -28,9 +28,9 @@
             <textarea name="metaDescription" class="form-control">{{ $post->metaDescription }}</textarea>
         </div>
         <div class="form-group">
-            <label for="urlSlug">URL Slug (optional)</label>
+            <label for="slug">URL Slug (optional)</label>
             <small>If not specified one will be created from the title</small>
-            <input type="text" name="urlSlug" class="form-control" value={{ $post->slug }} />
+            <input type="text" name="slug" class="form-control" value={{ $post->slug }} />
         </div>
         <input type="submit" name="update" class="btn btn-success" value="Update" />
         <input type="submit" name="delete" class="btn btn-danger" value="Delete" />

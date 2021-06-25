@@ -17,8 +17,9 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:posts|regex:/^[A-Za-z0-9 ]+$/i|max:255',
+            'title' => 'required|max:255',
             'body' => 'required',
+            'slug' => 'unique:posts|regex:/^[A-Za-z0-9 ]+$/i'
         ];
     }
 
@@ -26,7 +27,8 @@ class PostRequest extends FormRequest
     {
         return [
             'title.required' => 'Please add a title',
-            'body.required' => 'Please add some content to the post'
+            'body.required' => 'Please add some content to the post',
+            'slug.unique' => 'The URL slug has already been used'
         ];
     }
 }

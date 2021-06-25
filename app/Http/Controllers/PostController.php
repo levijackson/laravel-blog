@@ -52,7 +52,7 @@ class PostController extends Controller
         $post->metaTitle = $data['metaTitle'];
         $post->body = $data['body'];
         $post->metaDescription = $data['metaDescription'];
-        $post->slug = $data['urlSlug'] ?? Str::slug($post->title);
+        $post->slug = $data['slug'] ?? Str::slug($post->title);
         $post->user_id = $request->user()->id;
 
         if ($request->has('draft')) {
@@ -96,7 +96,7 @@ class PostController extends Controller
         $post->metaTitle = $request->get('metaTitle');
         $post->body = $request->get('body');
         $post->metaDescription = $request->get('metaDescription');
-        $post->slug = $request->get('urlSlug') ?? Str::slug($post->title);
+        $post->slug = $request->get('slug') ?? Str::slug($post->title);
         $post->user_id = $request->user()->id;
 
         $message = 'Post updated!';

@@ -36,9 +36,9 @@
             <textarea name="metaDescription" class="form-control">{{ old('metaDescription') }}</textarea>
         </div>
         <div class="form-group">
-            <label for="urlSlug">URL Slug (optional)</label>
+            <label for="slug">URL Slug (optional)</label>
             <small>If not specified one will be created from the title</small>
-            <input type="text" name="urlSlug" class="form-control" value="{{ old('urlSlug') }}" />
+            <input type="text" name="slug" class="form-control" value="{{ old('slug') }}" />
         </div>
         <input type="submit" name="publish" class="btn btn-success" value="Publish" />
         <input type="submit" name="draft" class="btn btn-default" value="Save Draft" />
