@@ -28,5 +28,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/post', 'App\Http\Controllers\PostController@save');
         Route::get('/post/{slug}', 'App\Http\Controllers\PostController@edit');
         Route::put('/post/{slug}', 'App\Http\Controllers\PostController@update');
+    
+        Route::post('/comment', 'App\Http\Controllers\CommentController@save');
     });
 });
