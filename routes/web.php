@@ -30,5 +30,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/post/{slug}', 'App\Http\Controllers\PostController@update');
     
         Route::post('/comment', 'App\Http\Controllers\CommentController@save');
+        Route::delete('/comment/{commentId}', 'App\Http\Controllers\CommentController@delete');
     });
 });

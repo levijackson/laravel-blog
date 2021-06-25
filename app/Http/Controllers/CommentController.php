@@ -19,4 +19,16 @@ class CommentController extends Controller
         return redirect()
             ->back();
     }
+
+    public function delete(Request $request, int $commentId)
+    {
+        $comment = Comment::where('id', $commentId)->first();
+
+        if ($request->has('delete')) {
+            $comment->delete();
+            $message = 'Comment deleted!';
+        }
+
+        return redirect()->back();
+    }
 }
