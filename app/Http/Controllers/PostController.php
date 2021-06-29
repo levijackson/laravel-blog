@@ -82,7 +82,7 @@ class PostController extends Controller
     {
         $post = Post::where('slug', $slug)->first();
 
-        if ($post && ($request->user()->id == $post->user_id || $request->user()->isAdmin())) {
+        if ($post && ($request->user() && $request->user()->id == $post->user_id || $request->user()->isAdmin())) {
             return view('blog.posts.edit', ['post' => $post]);
         }
         
