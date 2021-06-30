@@ -68,15 +68,14 @@ class PostControllerTest extends TestCase
     }
 
     /**
-     * New blog post URLs should not be loadable by an
-     * anonymous user
+     * Anaonymous users can not load new blog post page
      *
      * @return void
      */
     public function testNewBlogPostDoesNotLoadAnonymousUser(): void
     {
         $response = $this->get('/admin/blog/post');
-        $response->assertStatus(500);
+        $response->assertStatus(302);
     }
 
     /**
@@ -91,12 +90,36 @@ class PostControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get('/admin/blog/post');
-            $response->assertStatus(200);
+        $response->assertStatus(200);
     }
 
     /**
-     * Edit blog post URLs should not be loadable by an
-     * anonymous user
+     * Authors can save a new blog post
+     *
+     * @return void
+     */
+    public function testNewBlogPostCreatedByAuthor(): void
+    {
+        $user = User::factory()->create();
+        $user->role = 'author';
+        $user->id = '1';
+
+        $data = [
+            'title' => 'Test new post by author',
+            'metaTitle' => '',
+            'body' => 'a blog post',
+            'metaDescription' => '',
+            'slug' => 'test-new-post-by-author'
+        ];
+
+        $response = $this->actingAs($user)
+            ->post('/admin/blog/post', $data);
+        $response->assertStatus(302);
+        $this->assertGreaterThan(0, strpos($response->getTargetUrl(), $data['slug']));
+    }
+
+    /**
+     * Anonymous users can not load a blog post edit page
      *
      * @return void
      */
@@ -105,11 +128,11 @@ class PostControllerTest extends TestCase
         $this->seed(PostSeeder::class);
 
         $response = $this->get('/admin/blog/post/laravel-test-post-1');
-        $response->assertStatus(500);
+        $response->assertStatus(302);
     }
 
     /**
-     * Authors can load the new blog post page
+     * Authors can load the edit blog post page
      *
      * @return void
      */
@@ -123,52 +146,60 @@ class PostControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get('/admin/blog/post/laravel-test-post-1');
-            $response->assertStatus(200);
+        $response->assertStatus(200);
     }
 
     /**
-     * Authors can load the draft blog post page
+     * Authors can save an edit to a blog post
      *
      * @return void
      */
-    public function testEditDraftBlogPostDoesLoadAuthor(): void
+    public function testEditBlogPostSavedByAuthor(): void
     {
         $this->seed(PostSeeder::class);
 
         $user = User::factory()->create();
         $user->role = 'author';
-        $user->id = '2';
+        $user->id = '1';
+
+        $data = [
+            'title' => 'Test new post by author',
+            'metaTitle' => '',
+            'body' => 'a blog post',
+            'metaDescription' => '',
+            'slug' => 'test-edit-post-by-author'
+        ];
 
         $response = $this->actingAs($user)
-            ->get('/admin/blog/post/laravel-test-post-2');
-            $response->assertStatus(200);
+            ->put('/admin/blog/post/laravel-test-post-1', $data);
+        $response->assertStatus(302);
+        $this->assertGreaterThan(0, strpos($response->getTargetUrl(), $data['slug']));
     }
 
-
-    // TODO
     /**
-     * - Anonymyous users can not comment on a blog post
-- Anonymous users can not delete blog posts
-- Admins can add a new post
-- Admins can edit a post
-- Admins can delete a post
-- Admins can view a draft blog post
-- Authors can add a new post
-- Authors can edit a post
-- Authors can delete a post
-     */
-
-
-    /**
-     * Anonymous users can not comment on a post
+     * Authors can delete posts
      *
      * @return void
      */
-    public function testAnonymousUsersCanNotComment(): void
+    public function testAuthorCanDeletePost(): void
     {
         $this->seed(PostSeeder::class);
 
-        $response = $this->post('/admin/blog/comment');
-        $response->assertStatus(200);
+        $user = User::factory()->create();
+        $user->role = 'author';
+        $user->id = '1';
+
+        $data = [
+            'title' => 'Test post by author',
+            'metaTitle' => '',
+            'body' => 'a blog post',
+            'metaDescription' => '',
+            'delete' => 1
+        ];
+
+        $response = $this->actingAs($user)
+            ->put('/admin/blog/post/laravel-test-post-1', $data);
+        $response->assertStatus(302);
+        $this->assertGreaterThan(0, strpos($response->getTargetUrl(), '/admin/blog/post'));
     }
 }
