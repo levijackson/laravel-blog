@@ -8,7 +8,7 @@ class CommentRequest extends FormRequest
 {
     public function authorize()
     {
-        if ($this->user()->id > 0) {
+        if ($this->user() && $this->user()->id > 0) {
             return true;
         }
         return false;

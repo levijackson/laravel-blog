@@ -13,7 +13,7 @@ class DeleteCommentRequest extends FormRequest
 
     public function authorize()
     {
-        if ($this->user()->canManagePosts()) {
+        if ($this->user() && $this->user()->canManagePosts()) {
             return true;
         }
         return false;
