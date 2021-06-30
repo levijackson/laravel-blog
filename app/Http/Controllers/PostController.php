@@ -23,7 +23,7 @@ class PostController extends Controller
 
     public function create(Request $request)
     {
-      if ($request->user()->canManagePosts()) {
+      if ($request->user() && $request->user()->canManagePosts()) {
         return view('blog.posts.create');
       } else {
         return redirect('/')
@@ -50,7 +50,7 @@ class PostController extends Controller
 
     public function save(PostRequest $request)
     {
-        if (!$request->user()->canManagePosts()) {
+        if ($request->user() && !$request->user()->canManagePosts()) {
             return redirect('/');
         }
 
@@ -82,7 +82,7 @@ class PostController extends Controller
     {
         $post = Post::where('slug', $slug)->first();
 
-        if ($post && ($request->user() && $request->user()->id == $post->user_id || $request->user()->isAdmin())) {
+        if ($post && ($request->user() && ($request->user()->id == $post->user_id || $request->user()->isAdmin()))) {
             return view('blog.posts.edit', ['post' => $post]);
         }
         
@@ -92,11 +92,15 @@ class PostController extends Controller
 
     public function update(PostRequest $request, string $slug)
     {
-        if (!$request->user()->canManagePosts()) {
+        if (!$request->user() || !$request->user()->canManagePosts()) {
             return redirect('/');
         }
         
         $post = Post::where('slug', $slug)->first();
+
+        if (!$post) {
+            return redirect('/');
+        }
 
         $data = $request->validated();
 
