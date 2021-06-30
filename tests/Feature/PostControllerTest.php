@@ -33,7 +33,7 @@ class PostControllerTest extends TestCase
     {
         $this->seed(PostSeeder::class);
 
-        $response = $this->get('/blog/post/laravel-test-post-1');
+        $response = $this->get('/blog/post/' . PostSeeder::POST_1_SLUG);
         $response->assertStatus(200);
     }
 
@@ -46,7 +46,7 @@ class PostControllerTest extends TestCase
     {
         $this->seed(PostSeeder::class);
 
-        $response = $this->get('/blog/post/laravel-test-post-2');
+        $response = $this->get('/blog/post/' . PostSeeder::POST_2_SLUG);
         $response->assertStatus(302);
     }
 
@@ -63,7 +63,7 @@ class PostControllerTest extends TestCase
         $user->role = 'author';
 
         $response = $this->actingAs($user)
-            ->get('/blog/post/laravel-test-post-2');
+            ->get('/blog/post/' . PostSeeder::POST_2_SLUG);
         $response->assertStatus(200);
     }
 
@@ -127,7 +127,7 @@ class PostControllerTest extends TestCase
     {
         $this->seed(PostSeeder::class);
 
-        $response = $this->get('/admin/blog/post/laravel-test-post-1');
+        $response = $this->get('/admin/blog/post/' . PostSeeder::POST_1_SLUG);
         $response->assertStatus(302);
     }
 
@@ -145,7 +145,7 @@ class PostControllerTest extends TestCase
         $user->id = '1';
 
         $response = $this->actingAs($user)
-            ->get('/admin/blog/post/laravel-test-post-1');
+            ->get('/admin/blog/post/' . PostSeeder::POST_1_SLUG);
         $response->assertStatus(200);
     }
 
@@ -171,7 +171,7 @@ class PostControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->put('/admin/blog/post/laravel-test-post-1', $data);
+            ->put('/admin/blog/post/' . PostSeeder::POST_1_SLUG, $data);
         $response->assertStatus(302);
         $this->assertGreaterThan(0, strpos($response->getTargetUrl(), $data['slug']));
     }
@@ -198,7 +198,7 @@ class PostControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($user)
-            ->put('/admin/blog/post/laravel-test-post-1', $data);
+            ->put('/admin/blog/post/' . PostSeeder::POST_2_SLUG, $data);
         $response->assertStatus(302);
         $this->assertGreaterThan(0, strpos($response->getTargetUrl(), '/admin/blog/post'));
     }
