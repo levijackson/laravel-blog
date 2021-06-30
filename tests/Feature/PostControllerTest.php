@@ -68,7 +68,7 @@ class PostControllerTest extends TestCase
     }
 
     /**
-     * Anaonymous users can not load new blog post page
+     * Anonymous users can not load new blog post page
      *
      * @return void
      */
